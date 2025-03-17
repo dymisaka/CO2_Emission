@@ -122,7 +122,7 @@
 											<label for="gross_tonnage">Gross Tonnage</label>
 											<div class="input-unit">
 												<input type="text" name="gross_tonnage" id="gross_tonnage" />
-												<span class="unit">GT</span> <!-- 添加总吨位单位，例如总吨位（GT） -->
+												<span class="unit">tons</span> <!-- 添加总吨位单位，例如总吨位（GT） -->
 											</div>
 										</div>
 
@@ -474,8 +474,17 @@
 												text: 'CO₂ emissions (tons)', // 设置 Y 轴标题
 												font: {
 													size: 14,
-													weight: 'bold'
+													weight: 'bold',
+													color: 'white'
 												}
+											},
+											ticks: {
+												color: 'white' // 设置Y轴刻度值的颜色为白色
+											}
+										},
+										x: {
+											ticks: {
+												color: 'white' // 设置X轴刻度值的颜色为白色
 											}
 										}
 									},
@@ -490,7 +499,9 @@
 													label += Number(context.parsed.y).toFixed(2);
 													return label;
 												}
-											}
+											},
+											bodyColor: 'white', // 设置tooltip中的文本颜色为白色
+            								titleColor: 'white' // 设置tooltip中的标题颜色为白色
 										},
 										legend: {
 											display: false // 隐藏图例
@@ -689,12 +700,21 @@
 													beginAtZero: true,
 													ticks: {
 														display: false // 不显示具体数值
+													},
+													grid: {
+														color: 'gray' // 设置雷达图网格线的颜色为白色
+													},
+													pointLabels: {
+														color: 'white' // 将雷达图点标签（如 length, breadth 等）颜色设置为白色
 													}
 												}
 											},
 											plugins: {
 												legend: {
 													position: 'top',
+													labels: {
+														color: 'white' // 设置雷达图图例标签颜色为白色
+													}
 												},
 												tooltip: {
 													enabled: true,
@@ -705,7 +725,9 @@
 															const rawValue = dataset.rawData[index];
 															return `${dataset.label}: ${rawValue}`;
 														}
-													}
+													},
+													bodyColor: 'white', // 设置tooltip中的文本颜色为白色
+            										titleColor: 'white' // 设置tooltip中的标题颜色为白色
 												}
 											}
 										};
@@ -763,7 +785,7 @@
 								.input-unit .unit {
 									margin-left: 8px;
 									font-size: 14px;
-									color: #555;
+									color: #f4efef;
 									white-space: nowrap; /* 防止单位换行 */
 								}
 								@keyframes fadeIn {
