@@ -1,0 +1,975 @@
+<!DOCTYPE HTML>
+<!--
+	Dimension by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>CO2 Emission prediction</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<!-- <link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript> -->
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<!-- <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script> -->
+		<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}" />
+		<noscript><link rel="stylesheet" href="{{ url_for('static', filename='assets/css/noscript.css') }}" /></noscript>
+		
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<!-- <div class="logo">
+							<span class="icon fa-gem"></span>
+						</div> -->
+						<div class="content">
+							<div class="inner">
+								<h1>CO2 Emission prediction</h1>
+								<!-- <p>A fully responsive site template designed by <a href="https://html5up.net">HTML5 UP</a> and released<br />
+								for free under the <a href="https://html5up.net/license">Creative Commons</a> license.</p> -->
+								<p>You can use this site to predict CO2 emission</p>
+							</div>
+						</div>
+						<nav>
+							<ul>
+								<li><a href="#intro">Intro</a></li>
+								<li><a href="#predict">predict</a></li>
+								<li><a href="#details">details</a></li>
+								<!-- <li><a href="#contact">Contact</a></li> -->
+								<!--<li><a href="#elements">Elements</a></li>-->
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Intro -->
+							<article id="intro">
+								<h2 class="major">Intro</h2>
+								<!-- <span class="image main"><img src="images/pic01.jpg" alt="" /></span> -->
+								<!-- <span class="image main"><img src="{{ url_for('static', filename='images/pic01.jpg') }}" alt="" /></span> -->
+
+
+								<!-- <p>Aenean ornare velit lacus, ac varius enim ullamcorper eu. Proin aliquam facilisis ante interdum congue. Integer mollis, nisl amet convallis, porttitor magna ullamcorper, amet egestas mauris. Ut magna finibus nisi nec lacinia. Nam maximus erat id euismod egestas. By the way, check out my <a href="#predict">awesome predict</a>.</p> -->
+								<!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus, vel sed vehicula.</p> -->
+								<h4>Project Overview</h4>
+								<p>This project focuses on accurate prediction of ship CO2 emissions using machine learning. We developed three models: Multilayer Perceptron (MLP), Transformer, and a two-step model combining Decision Trees and Transformer. By integrating vessel operation parameters, the system provides CO2 emission predictions. Users can input parameters via the webpage to obtain results and compare them with actual datasets, enabling data-driven decisions for sustainable shipping.</p>
+								<h4>Project Significance</h4>
+								<p>Shipping is a major global carbon emitter. This project aids operators in optimizing routes and reducing energy consumption through model optimization and data visualization, thereby cutting greenhouse gas emissions. The comparison between predictions and real data validates model reliability, offering scientific support for the development of green shipping technologies.</p>
+								<!-- <h4>How to Use the Webpage</h4>
+								<p></p> -->
+							</article>
+
+						<!-- predict -->
+							<article id="predict">
+								<h2 class="major">predict</h2>
+								<form id="predict-form" method="post" action="/predict">
+									<div class="fields">
+										<div class="field">
+											<label for="type">Category</label>
+											<select name="type" id="type">
+												<option value="">-</option>
+												<option value="0">Bulk carrier</option>
+												<option value="1">Chemical tanker</option>
+												<option value="2">Combination carrier</option>
+												<option value="3">Container/ro-ro cargo ship</option>
+												<option value="4">Container ship</option>
+												<option value="5">Gas carrier</option>
+												<option value="6">General cargo ship</option>
+												<option value="7">LNG carrier</option>
+												<option value="8">Oil tanker</option>
+												<option value="9">Passenger ship</option>
+												<option value="10">Refrigerated cargo carrier</option>
+												<option value="11">Ro-pax ship</option>
+												<option value="12">Ro-ro ship</option>
+											</select>
+										</div>
+										<!-- Length 输入框 -->
+										<div class="field half">
+											<label for="length">Length</label>
+											<div class="input-unit">
+												<input type="text" name="length" id="length" />
+												<span class="unit">m</span> <!-- 添加长度单位，例如米（m） -->
+											</div>
+										</div>
+
+										<!-- Breadth 输入框 -->
+										<div class="field half">
+											<label for="breadth">Breadth</label>
+											<div class="input-unit">
+												<input type="text" name="breadth" id="breadth" />
+												<span class="unit">m</span> <!-- 添加宽度单位，例如米（m） -->
+											</div>
+										</div>
+
+										<!-- Deadweight 输入框 -->
+										<div class="field half">
+											<label for="deadweight">Deadweight</label>
+											<div class="input-unit">
+												<input type="text" name="deadweight" id="deadweight" />
+												<span class="unit">tons</span> <!-- 添加载重量单位，例如吨（tons） -->
+											</div>
+										</div>
+
+										<!-- Gross Tonnage 输入框 -->
+										<div class="field half">
+											<label for="gross_tonnage">Gross Tonnage</label>
+											<div class="input-unit">
+												<input type="text" name="gross_tonnage" id="gross_tonnage" />
+												<span class="unit">GT</span> <!-- 添加总吨位单位，例如总吨位（GT） -->
+											</div>
+										</div>
+
+										<!-- Speed 输入框 -->
+										<div class="field half">
+											<label for="speed">Speed</label>
+											<div class="input-unit">
+												<input type="text" name="speed" id="speed" />
+												<span class="unit">knots</span> <!-- 添加速度单位，例如节（knots） -->
+											</div>
+										</div>
+
+										<!-- Time 输入框 -->
+										<div class="field half">
+											<label for="time">Time</label>
+											<div class="input-unit">
+												<input type="text" name="time" id="time" />
+												<span class="unit">h</span> <!-- 添加时间单位，例如小时（h） -->
+											</div>
+										</div>
+
+										<!-- <div class="field half">
+											<label for="name">Name</label>
+											<input type="text" name="name" id="name" />
+										</div>
+										<div class="field half">
+											<label for="email">Email</label>
+											<input type="text" name="email" id="email" />
+										</div> -->
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="predict" class="primary" /></li>
+										<li><input type="reset" value="Reset" /></li>
+									</ul>
+								</form>
+								<!-- <h2>Prediction results</h2>
+								<div class="table-wrapper">
+									<h3>Transformer Model Predictions</h3>
+            						<div id="transformerResult">Waiting for prediction...</div>
+								</div> -->
+								<div id="results-container" style="display: none; min-height: 1200px;"> 
+									<!-- 预测结果表格（保持不变） -->
+									<h3>Prediction Results</h3>
+									<div class="table-wrapper">
+										<table class="prediction-table">
+											<thead>
+												<tr>
+													<th>Model</th>
+													<th>Predicted CO₂ (tonnes)</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>MLP</td>
+													<td id="mlp-result">-</td>
+												</tr>
+												<tr>
+													<td>Transformer</td>
+													<td id="transformer-result">-</td>
+												</tr>
+												<tr>
+													<td>2-Step</td>
+													<td id="two-steps-result">-</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									
+									
+									
+									<!-- 最近数据表格：展示所有属性和 Actual CO₂ -->
+									<h3>reference data </h3>
+									<!-- 显示用户选择的船舶类型 -->
+									<p>Your ship type is <span id="ship-type-display">-</span></p>
+									<div class="table-wrapper">
+										<table class="nearest-table">
+											<thead>
+												<tr>
+													<th>Length</th>
+													<th>Breadth</th>
+													<th>Deadweight</th>
+													<th>Gross Tonnage</th>
+													<th>Speed</th>
+													<th>Time</th>
+													<th>Actual CO₂</th>
+												</tr>
+											</thead>
+											<tbody id="nearest-data">
+											</tbody>
+										</table>
+									</div>
+
+									<!-- 显示预测结果的容器 -->
+									<!-- <div id="results-container" style="display: none;"> -->
+										<!-- 更新预测结果和表格的部分保持不变 -->
+
+										<!-- 添加柱状图 -->
+										<div class="chart-container">
+											<h3>Comparison of CO₂ emission predictions</h3>
+											<canvas id="barChart"></canvas>
+										</div>
+
+										<!-- 添加雷达图 -->
+										<div class="chart-container">
+											<h3>Comparison of parameters</h3>
+											<canvas id="radarChart"></canvas>
+										</div>
+									<!-- </div> -->
+
+									
+									
+								</div>
+								
+								<script>
+								/// 定义Chart实例变量，用于避免重复创建图表
+								let barChart = null;
+								let radarChart = null;
+
+								const keyMap = {
+									Length: 'length',
+									Breadth: 'breadth',
+									Deadweight: 'deadweight',
+									GrossTonnage: 'gross_tonnage',
+									Speed: 'speed',
+									Time: 'time'
+								};
+
+								// // 数据归一化函数（基于z-score归一化，并将平均值调整到0.7）
+								// function normalize(data, referenceList) {
+								// 	const keys = Object.keys(data);
+								// 	const normalizedData = {};
+								// 	keys.forEach(key => {
+								// 		const mappedKey = keyMap[key];
+								// 		if (!mappedKey) {
+								// 			console.warn(`Key name mapping not found：${key}`);
+								// 			normalizedData[key] = 0.7; // 设置为平均值
+								// 			return;
+								// 		}
+								// 		// 提取参考数据和用户数据的值
+								// 		const referenceValues = referenceList.map(item => parseFloat(item[mappedKey]));
+								// 		const userValue = parseFloat(data[key]);
+
+								// 		// 计算均值和标准差，保留两位小数
+								// 		const mean = average([...referenceValues, userValue]);
+								// 		const variance = average([...referenceValues, userValue].map(v => Math.pow(v - mean, 2)));
+								// 		const std = Number(Math.sqrt(variance).toFixed(2));
+
+								// 		if (std === 0) {
+								// 			normalizedData[key] = 0.7; // 所有值相同
+								// 		} else {
+								// 			// 进行z-score归一化，并调整平均值到0.7，缩放因子为0.2
+								// 			normalizedData[key] = 0.7 + ((userValue - mean) / std) * 0.2;
+								// 			// 裁剪到[0,1]范围
+								// 			normalizedData[key] = Math.min(Math.max(normalizedData[key], 0), 1);
+								// 		}
+								// 	});
+								// 	return normalizedData;
+								// }
+
+								// 计算平均值的辅助函数
+								function average(array) {
+									if (!Array.isArray(array) || array.length === 0) return 0;
+									const sum = array.reduce((acc, val) => acc + val, 0);
+									return Number((sum / array.length).toFixed(2));
+								}
+
+								// 计算每个键的均值和标准差
+								function computeMeanStd(referenceDataList) {
+									const keys = ['Length', 'Breadth', 'Deadweight', 'GrossTonnage', 'Speed', 'Time'];
+									const stats = {};
+									keys.forEach(key => {
+										const mappedKey = keyMap[key];
+										if (!mappedKey) {
+											console.warn(`Key name mapping not found：${key}`);
+											stats[key] = { mean: 0, std: 0 };
+											return;
+										}
+										const values = referenceDataList.map(item => parseFloat(item[mappedKey]));
+										const mean = average(values);
+										const variance = average(values.map(v => Math.pow(v - mean, 2)));
+										const std = Number(Math.sqrt(variance).toFixed(2));
+										stats[key] = { mean, std };
+									});
+									return stats;
+								}
+
+
+								// 数据归一化函数（基于z-score归一化，并将平均值调整到0.7）
+								function normalize(data, stats) {
+									const keys = Object.keys(data);
+									const normalizedData = {};
+									keys.forEach(key => {
+										const mappedKey = keyMap[key];
+										if (!mappedKey || !stats[key]) {
+											console.warn(`Key name mapping not found或没有统计信息：${key}`);
+											normalizedData[key] = 0.7; // 设置为平均值
+											return;
+										}
+										
+										const userValue = parseFloat(data[key]);
+										const { mean, std } = stats[key];
+									
+										if (std === 0) {
+											normalizedData[key] = 0.7; // 所有值相同
+										} else {
+											// 进行z-score归一化，并调整平均值到0.7，缩放因子为0.2
+											normalizedData[key] = 0.7 + ((userValue - mean) / std) * 0.2;
+											// 裁剪到[0,1]范围
+											normalizedData[key] = Math.min(Math.max(normalizedData[key], 0), 1);
+										}
+									});
+									return normalizedData;
+								}
+
+
+								document.getElementById("predict-form").addEventListener("submit", function(e) {
+									e.preventDefault();
+									
+									const form = this;
+									fetch("/predict", {
+										method: "POST",
+										body: new FormData(form)
+									})
+									.then(r => r.json())
+									.then(data => {
+										if (data.error) {
+											alert("Error: " + data.error);
+											return;
+										}
+										
+										// 显示结果容器
+										document.getElementById("results-container").style.display = 'block';
+										
+										// 更新预测结果（确保相应元素存在）
+										if (document.getElementById("mlp-result")) {
+											document.getElementById("mlp-result").textContent = data.predictions.MLP.toFixed(2);
+										}
+										if (document.getElementById("transformer-result")) {
+											document.getElementById("transformer-result").textContent = data.predictions.Transformer.toFixed(2);
+										}
+										if (document.getElementById("two-steps-result")) {
+											document.getElementById("two-steps-result").textContent = data.predictions["2steps"].toFixed(2);
+										}
+										
+										// 更新船舶类型显示（使用下拉框中选项的文本）
+										const shipTypeSelect = document.getElementById("type");
+										const shipTypeText = shipTypeSelect.options[shipTypeSelect.selectedIndex].text;
+										document.getElementById("ship-type-display").textContent = shipTypeText;
+										
+										// 更新最近数据表格（假设 data.nearest 为最近3条数据，列表中每个元素为字典）
+										const nearestDataTable = document.getElementById("nearest-data");
+										nearestDataTable.innerHTML = "";
+										data.nearest.forEach(row => {
+											const tr = document.createElement("tr");
+											tr.innerHTML = `<td>${row.length}</td>
+															<td>${row.breadth}</td>
+															<td>${row.deadweight}</td>
+															<td>${row.gross_tonnage}</td>
+															<td>${row.speed}</td>
+															<td>${row.time}</td>
+															<td>${row.co2}</td>`;
+											nearestDataTable.appendChild(tr);
+										});
+
+										// 准备绘制柱状图和雷达图的数据
+										// 假设data.predictions包含MLP, Transformer, 2steps, Actual
+										const predictions = data.predictions;
+										// 假设data.nearest包含三个参考数据
+										const referenceDataList = data.nearest;
+										
+										// 生成或更新柱状图
+										updateBarChart(predictions, referenceDataList);
+
+										// 生成或更新雷达图
+										updateRadarChart(predictions, referenceDataList);
+									})
+									.catch(e => console.error("Fetch error:", e));
+								});
+								
+
+
+								const referenceColors = [
+									{
+										backgroundColor: 'rgba(0, 105, 225, 0.6)',    // Reference data1 - Royal Blue
+										borderColor: 'rgba(0, 105, 225, 1)'  ,        // Reference data1 - Royal Blue边框
+										innerColor: 'rgba(0, 105, 225, 0.1)'
+									},
+									{
+										backgroundColor: 'rgba(50, 144, 255, 0.6)',     // Reference data2 - Deep Sky Blue
+										borderColor: 'rgba(0, 191, 255, 1)',           // Reference data2 - Deep Sky Blue边框
+										innerColor: 'rgba(0, 191, 225, 0.1)'
+									},
+									{
+										backgroundColor: 'rgba(0, 200, 255, 0.6)',    // Reference data3 - Dodger Blue
+										borderColor: 'rgba(30, 144, 255, 1)',          // Reference data3 - Dodger Blue边框
+										innerColor:'rgba(30, 144, 255, 0)'
+									}
+								];
+
+
+								// 绘制或更新柱状图的函数
+								function updateBarChart(predictions, referenceDataList) {
+									const ctxBar = document.getElementById('barChart').getContext('2d');
+
+									// 提取3个参考数据的Actual CO2
+									const actualCO2s = referenceDataList.map(ref => parseFloat(ref.co2));
+									console.log("Actual CO2s:", actualCO2s);
+									console.log("Predictions:", predictions);
+
+
+									
+									const chartData = {
+										labels: ['MLP', 'Transformer', 'Two-Step', 'Reference data1', 'Reference data2', 'Reference data3'],
+										datasets: [{
+											// label: 'CO₂ emissions (tons)',
+											data: [
+												predictions.MLP,
+												predictions.Transformer,
+												predictions["2steps"],
+												...actualCO2s
+											],
+											backgroundColor: [
+												'rgba(255, 206, 86, 0.6)',       // MLP - 黄色
+												'rgba(128, 0, 128, 0.6)',         // Transformer - 紫色
+												'rgba(255, 99, 132, 0.6)',        // Two-Step - 红色
+												referenceColors[0].backgroundColor, // Reference data1 - 深蓝色
+												referenceColors[1].backgroundColor, // Reference data2 - 蓝色
+												referenceColors[2].backgroundColor  // Reference data3 - 浅蓝色
+											],
+											borderColor: [
+												'rgba(255, 206, 86, 1)',          // MLP - 黄色边框
+												'rgba(128, 0, 128, 1)',            // Transformer - 紫色边框
+												'rgba(255, 99, 132, 1)',           // Two-Step - 红色边框
+												referenceColors[0].borderColor,    // Reference data1 - 深蓝色边框
+												referenceColors[1].borderColor,    // Reference data2 - 蓝色边框
+												referenceColors[2].borderColor     // Reference data3 - 浅蓝色边框
+											],
+											borderWidth: 1
+										}]
+									};
+
+									const chartOptions = {
+									responsive: true,
+									scales: {
+										y: {
+											beginAtZero: true,
+											title: {
+												display: true,
+												text: 'CO₂ emissions (tons)', // 设置 Y 轴标题
+												font: {
+													size: 14,
+													weight: 'bold'
+												}
+											}
+										}
+									},
+									plugins: {
+										tooltip: {
+											callbacks: {
+												label: function(context) {
+													let label = context.dataset.label || '';
+													if (label) {
+														label += ': ';
+													}
+													label += Number(context.parsed.y).toFixed(2);
+													return label;
+												}
+											}
+										},
+										legend: {
+											display: false // 隐藏图例
+										}
+									}
+								};
+
+									if (barChart) {
+										if (barChart instanceof Chart) {
+											barChart.data = chartData;
+											barChart.options = chartOptions;
+											barChart.update();
+										} else {
+											// console.error("barChart已存在但不是Chart实例。");
+											// 重新创建barChart
+											barChart = new Chart(ctxBar, {
+												type: 'bar',
+												data: chartData,
+												options: chartOptions
+											});
+										}
+									} else {
+										// 创建新的柱状图
+										barChart = new Chart(ctxBar, {
+											type: 'bar',
+											data: chartData,
+											options: chartOptions
+										});
+									}
+
+									// 调试信息
+									console.log("Bar Chart data:", chartData);
+								}
+
+								// 绘制或更新雷达图的函数
+								// 绘制或更新雷达图的函数
+								function updateRadarChart(predictions, referenceDataList) {
+									try {
+										// 从表单获取用户输入的数据
+										const userData = {
+											Length: parseFloat(document.getElementById("length").value),
+											Breadth: parseFloat(document.getElementById("breadth").value),
+											Deadweight: parseFloat(document.getElementById("deadweight").value),
+											GrossTonnage: parseFloat(document.getElementById("gross_tonnage").value),
+											Speed: parseFloat(document.getElementById("speed").value),
+											Time: parseFloat(document.getElementById("time").value)
+										};
+
+										// 确保所有用户输入的数据都是有效数字
+										for (let key in userData) {
+											if (isNaN(userData[key])) {
+												throw new Error(`The data entered by the user is invalid: ${key}`);
+											}
+										}
+
+										console.log("用户输入数据（原始）：", userData);
+
+										// 计算参考平均值（可选，根据需要）
+										const referenceAverages = {
+											Length: average(referenceDataList.map(item => parseFloat(item.length))),
+											Breadth: average(referenceDataList.map(item => parseFloat(item.breadth))),
+											Deadweight: average(referenceDataList.map(item => parseFloat(item.deadweight))),
+											GrossTonnage: average(referenceDataList.map(item => parseFloat(item.gross_tonnage))),
+											Speed: average(referenceDataList.map(item => parseFloat(item.speed))),
+											Time: average(referenceDataList.map(item => parseFloat(item.time)))
+										};
+
+										// 计算统一的均值和标准差（基于参考数据集）
+										const stats = computeMeanStd(referenceDataList);
+										console.log("统计量（均值和标准差）：", stats);
+
+										// 归一化用户数据
+										const normalizedUserData = normalize(userData, stats);
+										console.log("用户输入数据（归一化）：", normalizedUserData);
+
+										// 归一化参考平均值（使用相同的统计量）
+										const normalizedReferenceAverages = normalize(referenceAverages, stats);
+										console.log("参考平均值（归一化）：", normalizedReferenceAverages);
+
+										// 归一化所有参考数据
+										const normalizedReferences = referenceDataList.map(ref => {
+											const mappedRef = {
+												Length: parseFloat(ref.length),
+												Breadth: parseFloat(ref.breadth),
+												Deadweight: parseFloat(ref.deadweight),
+												GrossTonnage: parseFloat(ref.gross_tonnage),
+												Speed: parseFloat(ref.speed),
+												Time: parseFloat(ref.time)
+											};
+											return normalize(mappedRef, stats);
+										});
+										console.log("参考数据（归一化）：", normalizedReferences);
+
+										// 存储原始数据（可选）
+										const rawDatasets = [
+											userData,
+											referenceAverages,
+											...referenceDataList
+										];
+
+										const ctxRadar = document.getElementById('radarChart').getContext('2d');
+
+										const averageColor = {
+											borderColor: 'rgba(255, 165, 0, 1)',           // 橙色边框
+											backgroundColor: 'rgba(255, 165, 0, 0.2)'     // 淡橙色填充，低透明度
+										};
+
+										const radarData = {
+											labels: ['Length', 'Breadth', 'Deadweight', 'Gross Tonnage', 'Speed', 'Time'],
+											datasets: [
+												{
+													label: 'Your inputs',
+													data: [
+														normalizedUserData.Length,
+														normalizedUserData.Breadth,
+														normalizedUserData.Deadweight,
+														normalizedUserData.GrossTonnage,
+														normalizedUserData.Speed,
+														normalizedUserData.Time
+													],
+													rawData: [
+														userData.Length,
+														userData.Breadth,
+														userData.Deadweight,
+														userData.GrossTonnage,
+														userData.Speed,
+														userData.Time
+													],
+													backgroundColor: 'rgba(255, 0, 0, 0.2)',
+													borderColor: 'rgba(255, 0, 0, 1)',
+													borderWidth: 2,
+													pointBackgroundColor: 'rgba(255, 0, 0, 1)'
+												},
+												{
+													label: 'Reference average value',
+													data: [
+														normalizedReferenceAverages.Length,
+														normalizedReferenceAverages.Breadth,
+														normalizedReferenceAverages.Deadweight,
+														normalizedReferenceAverages.GrossTonnage,
+														normalizedReferenceAverages.Speed,
+														normalizedReferenceAverages.Time
+													],
+													rawData: [
+														referenceAverages.Length,
+														referenceAverages.Breadth,
+														referenceAverages.Deadweight,
+														referenceAverages.GrossTonnage,
+														referenceAverages.Speed,
+														referenceAverages.Time
+													],
+													backgroundColor: averageColor.backgroundColor, 
+													borderColor: averageColor.borderColor,    
+													borderWidth: 2,
+													borderDash: [], // 实线
+													pointBackgroundColor: averageColor.borderColor,
+													fill: true
+												},
+												// 添加所有参考数据集
+												...normalizedReferences.map((ref, index) => ({
+													label: `Reference Data ${index + 1}`,
+													data: [
+														ref.Length,
+														ref.Breadth,
+														ref.Deadweight,
+														ref.GrossTonnage,
+														ref.Speed,
+														ref.Time
+													],
+													rawData: [
+														referenceDataList[index].length,
+														referenceDataList[index].breadth,
+														referenceDataList[index].deadweight,
+														referenceDataList[index].gross_tonnage,
+														referenceDataList[index].speed,
+														referenceDataList[index].time
+													],
+													backgroundColor: referenceColors[index].innerColor,
+													borderColor: referenceColors[index].borderColor,
+													borderWidth: 1,
+													borderDash: [5, 5], // 虚线
+													pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+												}))
+											]
+										};
+
+										const radarOptions = {
+											responsive: true,
+											elements: {
+												line: {
+													borderWidth: 2
+												}
+											},
+											scales: {
+												r: {
+													beginAtZero: true,
+													ticks: {
+														display: false // 不显示具体数值
+													}
+												}
+											},
+											plugins: {
+												legend: {
+													position: 'top',
+												},
+												tooltip: {
+													enabled: true,
+													callbacks: {
+														label: function(context) {
+															const dataset = context.dataset;
+															const index = context.dataIndex;
+															const rawValue = dataset.rawData[index];
+															return `${dataset.label}: ${rawValue}`;
+														}
+													}
+												}
+											}
+										};
+
+										if (radarChart) {
+											if (radarChart instanceof Chart) {
+												radarChart.data = radarData;
+												radarChart.options = radarOptions;
+												radarChart.update();
+											} else {
+												console.error("radarChart已存在但不是Chart实例。");
+												// 重新创建radarChart
+												radarChart = new Chart(ctxRadar, {
+													type: 'radar',
+													data: radarData,
+													options: radarOptions
+												});
+											}
+										} else {
+											// 创建新的雷达图
+											radarChart = new Chart(ctxRadar, {
+												type: 'radar',
+												data: radarData,
+												options: radarOptions
+											});
+										}
+
+										// 调试信息
+										console.log("雷达图 数据:", radarData);
+									} catch (error) {
+										console.error("绘制雷达图时出错：", error);
+										alert("An error occurred while drawing the radar map. Please refer to the console for detailed information.");
+									}
+								}
+								</script>
+								
+								<style>
+								/* 容器内的输入框和单位 */
+								.input-unit {
+									display: flex;
+									align-items: center;
+									margin-top: 5px; /* 调整输入框与标签之间的间距 */
+								}
+
+								/* 输入框 */
+								.input-unit input {
+									flex: 1; /* 输入框占据可用空间 */
+									padding: 8px;
+									font-size: 14px;
+									border: 1px solid #ccc;
+									border-radius: 4px;
+								}
+
+								/* 单位文本 */
+								.input-unit .unit {
+									margin-left: 8px;
+									font-size: 14px;
+									color: #555;
+									white-space: nowrap; /* 防止单位换行 */
+								}
+								@keyframes fadeIn {
+									from { opacity: 0; transform: translateY(10px); }
+									to { opacity: 1; transform: translateY(0); }
+								}
+								
+								/* 表格样式 */
+								.table-wrapper {
+									margin-bottom: 1.5rem;
+								}
+								
+								table {
+									width: 100%;
+									border-collapse: collapse;
+									background: rgba(0, 0, 0, 0.3);
+								}
+								
+								table th, table td {
+									padding: 1rem;
+									border: 1px solid rgba(255,255,255,0.1);
+									text-align: center;
+								}
+								
+								.prediction-table th {
+									background-color: #333;
+									color: #fff;
+								}
+								
+								.nearest-table th {
+									background-color: #444;
+									color: #fff;
+								}
+
+								.chart-container {
+									width: 80%;
+									margin: 20px auto;
+								}
+
+								.nearest-table {
+									width: 100%;
+									border-collapse: collapse;
+								}
+
+/* 								
+
+								.nearest-table th {
+									background-color: #f2f2f2;
+									text-align: center;
+								} */
+								</style>
+								
+
+								
+							</article>
+
+						<!-- About -->
+							<article id="details">
+								<h2 class="major">Details</h2>
+								<!-- <span class="image main"><img src="images/pic03.jpg" alt="" /></span> -->
+								<!-- <span class="image main"><img src="{{ url_for('static', filename='images/pic03.jpg') }}" alt="" /></span> -->
+
+								<!-- <p>Lorem ipsum dolor sit amet, consectetur et adipiscing elit. Praesent eleifend dignissim arcu, at eleifend sapien imperdiet ac. Aliquam erat volutpat. Praesent urna nisi, fringila lorem et vehicula lacinia quam. Integer sollicitudin mauris nec lorem luctus ultrices. Aliquam libero et malesuada fames ac ante ipsum primis in faucibus. Cras viverra ligula sit amet ex mollis mattis lorem ipsum dolor sit amet.</p> -->
+								<h4>1. MLP (Multilayer Perceptron)</h4>
+								<!-- <h5>Core Mechanism</h5> -->
+								<ul>
+								<li>3-layer feedforward network</li>
+								<li>Hidden layers: 64 → 32 neurons</li>
+								<!-- <li>Regularization: Dropout (30%) + BatchNorm</li> -->
+								<li>Test R²: 0.88</li>
+								</ul>
+
+								<!-- <h5>Prediction Strategy</h5> -->
+								<!-- <ul>
+								<li>Direct mapping from 7 input features to CO₂ emission</li>
+								<li>Features: Tonnage, dimensions, speed, engine power, etc.</li>
+								
+								</ul> -->
+
+								<hr>
+
+								<h4>2. Transformer</h4>
+								<!-- <h5>Architecture</h5> -->
+								<ul>
+								<li>2 encoder layers with 4 attention heads</li>
+								<li>Positional encoding excluded (non-sequential data)</li>
+								<li>Same 7 input features as MLP</li>
+								<li>Test R²: 0.91</li>
+								</ul>
+
+								<!-- <h5>Key Implementation</h5>
+								<ul>
+								<li>Input reshaping: (batch_size, 7) → (batch_size, 1, 7)</li>
+								<li>Feature scaling: StandardScaler for inputs</li>
+								<li>Test R²: 0.91</li>
+								</ul> -->
+
+								<hr>
+
+								<h4>3. Two-Step Model (Random Forest + Transformer)</h4>
+								<h5>Stage 1: Engine Parameter Prediction</h5>
+								<ul>
+								<li>Random Forest predicts:
+									<ul>
+									<li>Engine power</li>
+									<!-- <li>Maximum speed</li> -->
+									</ul>
+								</li>
+								<li>Input: Static ship parameters</li>
+								</ul>
+
+								<h5>Stage 2: Emission Prediction</h5>
+								<ul>
+								<li>Transformer receives:
+									<ul>
+									<li>Predicted engine parameters from Stage 1</li>
+									<li>navigational parameter</li>
+									</ul>
+								</li>
+								<li>Test R²: 0.93</li>
+								</ul>
+
+								<hr>
+
+								<h4>4. Model Comparison</h4>
+								<table border="1">
+								<tr>
+									<th>Model</th>
+									<th>Test R²</th>
+									<th>Key Advantage</th>
+								</tr>
+								<tr>
+									<td>MLP</td>
+									<td>0.88</td>
+									<td>Simple implementation</td>
+								</tr>
+								<tr>
+									<td>Transformer</td>
+									<td>0.91</td>
+									<td>Captures feature interactions</td>
+								</tr>
+								<tr>
+									<td>Two-Step</td>
+									<td>0.93</td>
+									<td>Hierarchical feature processing</td>
+								</tr>
+								</table>
+								<p>click <a href="https://github.com/dymisaka/co2">here</a> to obtain the project code.</p>
+							</article>
+
+						<!-- Contact -->
+							<!-- <article id="contact">
+								<h2 class="major">Contact</h2>
+								<form method="post" action="#">
+									<div class="fields">
+										<div class="field half">
+											<label for="name">Name</label>
+											<input type="text" name="name" id="name" />
+										</div>
+										<div class="field half">
+											<label for="email">Email</label>
+											<input type="text" name="email" id="email" />
+										</div>
+										<div class="field">
+											<label for="message">Message</label>
+											<textarea name="message" id="message" rows="4"></textarea>
+										</div>
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="Send Message" class="primary" /></li>
+										<li><input type="reset" value="Reset" /></li>
+									</ul>
+								</form>
+								<ul class="icons">
+									<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+									<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+									<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+									<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</article> -->
+
+						
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<!-- <p class="copyright">&copy; Untitled. Design: <a href="https://html5up.net">HTML5 UP</a>.</p> -->
+					</footer>
+
+			</div>
+
+		<!-- BG -->
+			<div id="bg"></div>
+
+		<!-- Scripts -->
+			<!-- <script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script> -->
+			<script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+			<script src="{{ url_for('static', filename='assets/js/browser.min.js') }}"></script>
+			<script src="{{ url_for('static', filename='assets/js/breakpoints.min.js') }}"></script>
+			<script src="{{ url_for('static', filename='assets/js/util.js') }}"></script>
+			<script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+
+	</body>
+</html>
