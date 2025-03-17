@@ -7,16 +7,21 @@ from finddata import find_nearest
 
 app = Flask(__name__)
 
+# # global mlp_model
+mlp_model.load_mlp_model()
+Transformer_model.load_Transformer_model()
+two_model.load_two_model()
+
 # 应用启动时加载所有模型
-@app.before_first_request
-def load_models():
-    print("Loading MLP model...")
-    mlp_model.load_mlp_model()
-    print("Loading Transformer model...")
-    Transformer_model.load_Transformer_model()
-    print("Loading Two-stage model...")
-    two_model.load_two_model()
-    print("All models loaded successfully")
+# @app.before_first_request
+# def load_models():
+#     print("Loading MLP model...")
+#     mlp_model.load_mlp_model()
+#     print("Loading Transformer model...")
+#     Transformer_model.load_Transformer_model()
+#     print("Loading Two-stage model...")
+#     two_model.load_two_model()
+#     print("All models loaded successfully")
 
 @app.route('/')
 def index():
